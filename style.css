@@ -1,0 +1,316 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --green: #66bb6a;
+  --yellow: #fdd835;
+  --red: #d32f2f;
+  --grey: #6b6b6b;
+  --gold: #d4af37;
+  --felt: #0b5d3a;
+  --felt-dark: #08432a;
+  --bg: #14171c;
+  --panel: #1d222b;
+  --text: #f2f2f2;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.app-header h1 {
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+
+.app-header .accent {
+  color: var(--gold);
+}
+
+.tagline {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.app-main {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Poker table */
+.table-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.poker-table {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 10;
+  background: radial-gradient(ellipse at center, var(--felt) 0%, var(--felt-dark) 100%);
+  border: 8px solid #3a2a17;
+  border-radius: 50% / 45%;
+  box-shadow: 0 0 0 4px var(--gold), inset 0 0 40px rgba(0,0,0,0.4);
+}
+
+.felt-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(212, 175, 55, 0.35);
+  font-weight: bold;
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+}
+
+.seat {
+  position: absolute;
+  width: 70px;
+  text-align: center;
+  background: var(--panel);
+  border: 2px solid #444;
+  border-radius: 10px;
+  padding: 6px 4px;
+  transition: all 0.2s ease;
+}
+
+.seat-name {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.seat-stack {
+  font-size: 0.65rem;
+  color: #bbb;
+}
+
+.seat.active {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px var(--gold);
+  background: #2a2410;
+}
+
+/* Seat positions around the oval */
+#seat-UTG  { top: 4%;  left: 50%; transform: translateX(-50%); }
+#seat-MP   { top: 22%; left: 88%; transform: translateX(-50%); }
+#seat-CO   { top: 68%; left: 88%; transform: translateX(-50%); }
+#seat-BTN  { top: 88%; left: 50%; transform: translateX(-50%); }
+#seat-SB   { top: 68%; left: 12%; transform: translateX(-50%); }
+#seat-BB   { top: 22%; left: 12%; transform: translateX(-50%); }
+
+/* Scenario box */
+.scenario-box {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #333;
+}
+
+.scenario-row {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.scenario-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scenario-label {
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scenario-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.scenario-value.cards {
+  letter-spacing: 2px;
+}
+
+.gto-percentages {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gto-pct-item {
+  flex: 1;
+  min-width: 90px;
+  text-align: center;
+  background: #14171c;
+  border-radius: 8px;
+  padding: 10px 6px;
+  border: 2px solid #333;
+}
+
+.gto-pct-name {
+  display: block;
+  font-size: 0.75rem;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.gto-pct-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 4px;
+}
+
+.color-green  { color: var(--green); border-color: var(--green) !important; }
+.color-yellow { color: var(--yellow); border-color: var(--yellow) !important; }
+.color-red    { color: var(--red); border-color: var(--red) !important; }
+.color-grey   { color: var(--grey); border-color: #333 !important; }
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 16px 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  min-height: 48px;
+  transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.action-btn:hover { filter: brightness(1.1); }
+.action-btn:active { transform: scale(0.97); }
+.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.fold-btn  { background: var(--red); }
+.call-btn  { background: var(--yellow); color: #222; }
+.raise-btn { background: #388e3c; }
+
+/* Feedback */
+.feedback-box {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid #333;
+  min-height: 30px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.feedback-box.feedback-correct   { border-color: var(--green); background: #16281a; }
+.feedback-box.feedback-close     { border-color: var(--yellow); background: #2a2410; }
+.feedback-box.feedback-incorrect { border-color: var(--red); background: #2a1414; }
+
+.next-btn {
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.next-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.next-btn:not(:disabled):hover { background: var(--gold); color: #14171c; }
+
+/* Stats */
+.stats-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 14px 16px;
+  border: 1px solid #333;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 70px;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--gold);
+}
+
+.reset-btn {
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: transparent;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.reset-btn:hover { background: #333; }
+
+.app-footer {
+  margin-top: 20px;
+  color: #666;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .app-header h1 { font-size: 1.6rem; }
+  .seat { width: 56px; padding: 4px 2px; }
+  .seat-name { font-size: 0.7rem; }
+  .seat-stack { font-size: 0.55rem; }
+  .scenario-value { font-size: 1.1rem; }
+  .gto-pct-value { font-size: 1.15rem; }
+  .action-btn { font-size: 0.95rem; padding: 14px 6px; }
+}

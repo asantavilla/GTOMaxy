@@ -1,0 +1,46 @@
+{
+  "positions": {
+    "UTG": {
+      "label": "UTG",
+      "fullName": "Under The Gun",
+      "fold": 85,
+      "call": 5,
+      "raise": 10
+    },
+    "MP": {
+      "label": "MP",
+      "fullName": "Middle Position",
+      "fold": 75,
+      "call": 8,
+      "raise": 17
+    },
+    "CO": {
+      "label": "CO",
+      "fullName": "Cutoff",
+      "fold": 65,
+      "call": 10,
+      "raise": 25
+    },
+    "BTN": {
+      "label": "BTN",
+      "fullName": "Button",
+      "fold": 55,
+      "call": 15,
+      "raise": 30
+    },
+    "SB": {
+      "label": "SB",
+      "fullName": "Small Blind",
+      "fold": 60,
+      "call": 25,
+      "raise": 15
+    },
+    "BB": {
+      "label": "BB",
+      "fullName": "Big Blind",
+      "fold": 30,
+      "call": 40,
+      "raise": 30
+    }
+  }
+}

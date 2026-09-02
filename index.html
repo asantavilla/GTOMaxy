@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTOMaxy | Poker GTO Preflop Trainer</title>
+  <meta name="description" content="Free browser-based GTO preflop poker trainer. Learn optimal opening ranges with instant color-coded feedback.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="app-header">
+    <h1>GTO<span class="accent">Maxy</span></h1>
+    <p class="tagline">Preflop GTO Trainer</p>
+  </header>
+
+  <main class="app-main">
+
+    <section class="table-wrap">
+      <div class="poker-table">
+        <div class="felt-label">6-MAX</div>
+
+        <div class="seat" id="seat-UTG" data-position="UTG">
+          <div class="seat-name">UTG</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+        <div class="seat" id="seat-MP" data-position="MP">
+          <div class="seat-name">MP</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+        <div class="seat" id="seat-CO" data-position="CO">
+          <div class="seat-name">CO</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+        <div class="seat" id="seat-BTN" data-position="BTN">
+          <div class="seat-name">BTN</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+        <div class="seat" id="seat-SB" data-position="SB">
+          <div class="seat-name">SB</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+        <div class="seat" id="seat-BB" data-position="BB">
+          <div class="seat-name">BB</div>
+          <div class="seat-stack">100 BB</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scenario-box">
+      <div class="scenario-row">
+        <div class="scenario-item">
+          <span class="scenario-label">Your Position</span>
+          <span id="current-position" class="scenario-value">--</span>
+        </div>
+        <div class="scenario-item">
+          <span class="scenario-label">Your Hand</span>
+          <span id="current-hand" class="scenario-value cards">--</span>
+        </div>
+      </div>
+
+      <div class="gto-percentages" id="gto-percentages">
+        <div class="gto-pct-item">
+          <span class="gto-pct-name">Fold</span>
+          <span id="pct-fold" class="gto-pct-value">--%</span>
+        </div>
+        <div class="gto-pct-item">
+          <span class="gto-pct-name">Call</span>
+          <span id="pct-call" class="gto-pct-value">--%</span>
+        </div>
+        <div class="gto-pct-item">
+          <span class="gto-pct-name">Raise</span>
+          <span id="pct-raise" class="gto-pct-value">--%</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button id="btn-fold" class="action-btn fold-btn">FOLD</button>
+      <button id="btn-call" class="action-btn call-btn">CALL</button>
+      <button id="btn-raise" class="action-btn raise-btn">RAISE</button>
+    </section>
+
+    <section class="feedback-box" id="feedback-box" aria-live="polite">
+      <p id="feedback-text">Choose an action to see GTO feedback.</p>
+    </section>
+
+    <button id="btn-next" class="next-btn" disabled>Next Hand →</button>
+
+    <section class="stats-box">
+      <div class="stat">
+        <span class="stat-label">Hands Played</span>
+        <span id="stat-hands" class="stat-value">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Accuracy</span>
+        <span id="stat-accuracy" class="stat-value">0%</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Streak</span>
+        <span id="stat-streak" class="stat-value">0</span>
+      </div>
+      <button id="btn-reset-stats" class="reset-btn">Reset Stats</button>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>GTOMaxy &mdash; Free preflop GTO trainer. Runs entirely in your browser.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
