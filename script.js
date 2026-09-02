@@ -1,10 +1,14 @@
 (() => {
-  const POSITIONS = ['UTG', 'MP', 'CO', 'BTN', 'SB', 'BB'];
+  const TURN_ORDER = ['UTG', 'MP', 'CO', 'BTN', 'SB', 'BB'];
   const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
   const SUITS = ['♠', '♥', '♦', '♣'];
   const RED_SUITS = new Set(['♥', '♦']);
   const CLOSE_CALL_THRESHOLD = 15;
   const STORAGE_KEY = 'gtomaxy-stats';
+
+  const BLIND_SB = 0.5;
+  const BLIND_BB = 1;
+  const RAISE_SIZE = 2.5;
 
   const config = {
     stackDepth: '100bb',
@@ -16,11 +20,11 @@
   let currentHandData = null;
   let currentHeroCards = null;
   let hasActed = false;
+  let potState = null;
 
   const el = {
     position: document.getElementById('current-position'),
     heroCards: document.getElementById('hero-cards'),
-    pctBox: document.getElementById('gto-percentages'),
     pctHint: document.getElementById('pct-hint'),
     pctFold: document.getElementById('pct-fold'),
     pctCall: document.getElementById('pct-call'),
@@ -35,9 +39,17 @@
     statHands: document.getElementById('stat-hands'),
     statAccuracy: document.getElementById('stat-accuracy'),
     statStreak: document.getElementById('stat-streak'),
-    feltLabel: document.getElementById('felt-label'),
+    potLine: document.getElementById('pot-line'),
     configCurrentText: document.getElementById('config-current-text'),
   };
+
+  function stackStart() {
+    return config.stackDepth === '50bb' ? 50 : 100;
+  }
+
+  function fmt(n) {
+    return (Math.round(n * 10) / 10).toString();
+  }
 
   function buildDeck() {
     const deck = [];
@@ -49,7 +61,7 @@
     return deck;
   }
 
-  function dealHeroCards() {
+  function dealTwoCards() {
     const deck = buildDeck();
     const i1 = Math.floor(Math.random() * deck.length);
     let i2 = Math.floor(Math.random() * (deck.length - 1));
@@ -67,7 +79,7 @@
   }
 
   function getRandomPosition() {
-    return POSITIONS[Math.floor(Math.random() * POSITIONS.length)];
+    return TURN_ORDER[Math.floor(Math.random() * TURN_ORDER.length)];
   }
 
   function getPercentageColor(percentage) {
@@ -101,12 +113,6 @@
     el.statStreak.textContent = stats.streak;
   }
 
-  function setSeatHighlight(position) {
-    POSITIONS.forEach((p) => {
-      document.getElementById(`seat-${p}`).classList.toggle('active', p === position);
-    });
-  }
-
   function renderCardFace(card) {
     const div = document.createElement('div');
     div.className = 'card card-face';
@@ -119,32 +125,6 @@
     const div = document.createElement('div');
     div.className = 'card card-back';
     return div;
-  }
-
-  function renderTableCards(heroPosition, heroCards) {
-    POSITIONS.forEach((p) => {
-      const container = document.getElementById(`cards-${p}`);
-      container.innerHTML = '';
-      if (p === heroPosition) {
-        container.appendChild(renderCardFace(heroCards[0]));
-        container.appendChild(renderCardFace(heroCards[1]));
-      } else {
-        container.appendChild(renderCardBack());
-        container.appendChild(renderCardBack());
-      }
-    });
-  }
-
-  function renderHeroCards(heroCards) {
-    el.heroCards.innerHTML = '';
-    el.heroCards.appendChild(renderCardFace(heroCards[0]));
-    el.heroCards.appendChild(renderCardFace(heroCards[1]));
-  }
-
-  function setPercentageDisplay(elem, value) {
-    elem.textContent = `${value}%`;
-    elem.classList.remove('color-green', 'color-yellow', 'color-red', 'color-grey');
-    elem.classList.add(`color-${getPercentageColor(value)}`);
   }
 
   async function loadPositionTable(position) {
@@ -161,44 +141,154 @@
     const stackLabel = config.stackDepth === '50bb' ? '50BB' : '100BB';
     const gameLabel = config.gameType === '6max' ? '6-Max' : '9-Max';
     el.configCurrentText.textContent = `${stackLabel} · ${gameLabel}`;
-    el.feltLabel.textContent = `${gameLabel.toUpperCase()} · ${stackLabel}`;
   }
 
-  function setActionButtons(validActions) {
-    const buttons = {
-      fold: el.btnFold,
-      call: el.btnCall,
-      raise: el.btnRaise,
-    };
-    Object.entries(buttons).forEach(([action, btn]) => {
-      const isValid = validActions.includes(action);
-      btn.disabled = !isValid;
-      btn.classList.toggle('invalid', !isValid);
+  function weightedChoice(handData) {
+    const r = Math.random() * 100;
+    if (r < handData.fold) return 'fold';
+    if (r < handData.fold + handData.call) return 'call';
+    return 'raise';
+  }
+
+  function applyAction(pos, action) {
+    if (action === 'fold') {
+      potState.folded[pos] = true;
+      return;
+    }
+    if (action === 'call') {
+      potState.contributions[pos] = potState.currentBet;
+      return;
+    }
+    // raise
+    if (potState.currentBet <= BLIND_BB) {
+      potState.currentBet = RAISE_SIZE;
+      potState.contributions[pos] = RAISE_SIZE;
+    } else {
+      // Someone already raised; this simplified model caps betting at one
+      // raise, so a second "raise" from the range just calls the existing bet.
+      potState.contributions[pos] = potState.currentBet;
+    }
+  }
+
+  async function simulateSeatAction(pos) {
+    const table = await loadPositionTable(pos);
+    const cards = dealTwoCards();
+    const canonical = toCanonicalHand(cards[0], cards[1]);
+    const handData = table.hands[canonical];
+    let action = weightedChoice(handData);
+    if (pos === 'BB' && potState.currentBet <= BLIND_BB && action === 'fold') {
+      // Nothing has been raised, so the BB isn't giving anything up by
+      // declining to fold here -- treat it as checking instead.
+      action = 'call';
+    }
+    applyAction(pos, action);
+  }
+
+  function renderTable() {
+    const heroIdx = TURN_ORDER.indexOf(currentPosition);
+    for (let offset = 0; offset < TURN_ORDER.length; offset++) {
+      const pos = TURN_ORDER[(heroIdx + offset) % TURN_ORDER.length];
+      const isHero = pos === currentPosition;
+      const isFolded = potState.folded[pos];
+      const contribution = potState.contributions[pos];
+
+      const seatEl = document.getElementById(`seat-slot${offset}`);
+      document.getElementById(`name-slot${offset}`).textContent = pos;
+      document.getElementById(`stack-slot${offset}`).textContent = `${fmt(stackStart() - contribution)} BB`;
+
+      seatEl.classList.toggle('active', isHero);
+      seatEl.classList.toggle('folded', !isHero && isFolded);
+
+      const cardsContainer = document.getElementById(`cards-slot${offset}`);
+      cardsContainer.innerHTML = '';
+      if (isHero) {
+        cardsContainer.appendChild(renderCardFace(currentHeroCards[0]));
+        cardsContainer.appendChild(renderCardFace(currentHeroCards[1]));
+      } else if (!isFolded) {
+        cardsContainer.appendChild(renderCardBack());
+        cardsContainer.appendChild(renderCardBack());
+      } else {
+        const label = document.createElement('div');
+        label.className = 'folded-label';
+        label.textContent = 'FOLDED';
+        cardsContainer.appendChild(label);
+      }
+
+      const betEl = document.getElementById(`bet-slot${offset}`);
+      betEl.innerHTML = '';
+      if (contribution > 0) {
+        const chip = document.createElement('span');
+        chip.className = 'chip-icon';
+        betEl.appendChild(chip);
+        const amount = document.createElement('span');
+        amount.textContent = `${fmt(contribution)} BB`;
+        betEl.appendChild(amount);
+      }
+    }
+
+    const pot = Object.values(potState.contributions).reduce((a, b) => a + b, 0);
+    el.potLine.textContent = `POT: ${fmt(pot)} BB`;
+  }
+
+  function renderHeroCards(heroCards) {
+    el.heroCards.innerHTML = '';
+    el.heroCards.appendChild(renderCardFace(heroCards[0]));
+    el.heroCards.appendChild(renderCardFace(heroCards[1]));
+  }
+
+  function setButtonsNeutral() {
+    [el.btnFold, el.btnCall, el.btnRaise].forEach((btn) => {
+      btn.disabled = false;
+      btn.classList.remove('reveal-green', 'reveal-yellow', 'reveal-red', 'reveal-grey');
     });
+    [el.pctFold, el.pctCall, el.pctRaise].forEach((span) => {
+      span.classList.add('hidden');
+      span.textContent = '';
+    });
+    el.pctHint.classList.remove('hidden');
+  }
+
+  function revealButtons(handData) {
+    const map = { fold: [el.btnFold, el.pctFold], call: [el.btnCall, el.pctCall], raise: [el.btnRaise, el.pctRaise] };
+    Object.entries(map).forEach(([action, [btn, pctSpan]]) => {
+      const value = handData[action];
+      btn.classList.add(`reveal-${getPercentageColor(value)}`);
+      btn.disabled = true;
+      pctSpan.textContent = `${value}%`;
+      pctSpan.classList.remove('hidden');
+    });
+    el.pctHint.classList.add('hidden');
   }
 
   async function newHand() {
     currentPosition = getRandomPosition();
     const table = await loadPositionTable(currentPosition);
 
-    currentHeroCards = dealHeroCards();
+    currentHeroCards = dealTwoCards();
     const canonical = toCanonicalHand(currentHeroCards[0], currentHeroCards[1]);
     currentHandData = table.hands[canonical];
 
+    potState = {
+      currentBet: BLIND_BB,
+      contributions: { UTG: 0, MP: 0, CO: 0, BTN: 0, SB: BLIND_SB, BB: BLIND_BB },
+      folded: { UTG: false, MP: false, CO: false, BTN: false, SB: false, BB: false },
+    };
+
+    const heroIdx = TURN_ORDER.indexOf(currentPosition);
+    for (let i = 0; i < heroIdx; i++) {
+      await simulateSeatAction(TURN_ORDER[i]);
+    }
+
     hasActed = false;
 
-    setSeatHighlight(currentPosition);
     el.position.textContent = `${currentPosition} (${table.fullName})`;
     renderHeroCards(currentHeroCards);
-    renderTableCards(currentPosition, currentHeroCards);
-
-    el.pctBox.classList.add('hidden');
-    el.pctHint.classList.remove('hidden');
+    renderTable();
 
     el.feedbackBox.className = 'feedback-box';
     el.feedbackText.textContent = 'Choose an action to see GTO feedback.';
 
-    setActionButtons(currentHandData.valid_actions);
+    setButtonsNeutral();
     el.btnNext.disabled = true;
   }
 
@@ -212,21 +302,20 @@
     return entries[0];
   }
 
-  function handleAction(userAction) {
+  async function handleAction(userAction) {
     if (hasActed) return;
-    if (!currentHandData.valid_actions.includes(userAction)) return;
     hasActed = true;
 
-    el.btnFold.disabled = true;
-    el.btnCall.disabled = true;
-    el.btnRaise.disabled = true;
-    el.btnNext.disabled = false;
+    applyAction(currentPosition, userAction);
 
-    el.pctBox.classList.remove('hidden');
-    el.pctHint.classList.add('hidden');
-    setPercentageDisplay(el.pctFold, currentHandData.fold);
-    setPercentageDisplay(el.pctCall, currentHandData.call);
-    setPercentageDisplay(el.pctRaise, currentHandData.raise);
+    const heroIdx = TURN_ORDER.indexOf(currentPosition);
+    for (let i = heroIdx + 1; i < TURN_ORDER.length; i++) {
+      await simulateSeatAction(TURN_ORDER[i]);
+    }
+
+    renderTable();
+    revealButtons(currentHandData);
+    el.btnNext.disabled = false;
 
     const [bestName, bestPct] = bestAction(currentHandData);
     const userPct = currentHandData[userAction];

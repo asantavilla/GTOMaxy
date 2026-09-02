@@ -6,17 +6,18 @@ A free, browser-based trainer for learning game-theory-optimal (GTO) preflop pok
 
 ## What it is
 
-GTOMaxy deals you a random position and a real two-card hand, shows your cards face-up at the table (opponents face-down), and lets you act with only the options that are actually part of the GTO strategy for that hand. After you act, it reveals the GTO fold/call/raise split with color-coded strength and tells you whether you matched it, were close, or missed.
+GTOMaxy deals you a random position and a real two-card hand at a table where your seat is always at the bottom. Opponents act around you — folding out of the hand (and off the table) or putting chips in the pot — before and after your turn. You act with all three options open, and only after you act does the trainer reveal the GTO fold/call/raise split, colors the buttons by GTO strength, and tells you whether you matched it, were close, or missed.
 
 ## Features
 
-- **Random position each hand** — any of the 6 seats (UTG, MP, CO, BTN, SB, BB), not a fixed rotation
+- **Random position each hand, hero always at the bottom seat** — the table rotates around you; opponents fill in around the ring in correct turn order (UTG → MP → CO → BTN → SB → BB)
 - **Real 169-hand range data** — every canonical starting hand (pairs, suited, offsuit) has its own fold/call/raise split, not just a position-level average
 - **Configurable stack depth & game type** — switch between 50BB and 100BB (6-Max now, 9-Max planned) from the sidebar; ranges adjust accordingly
-- **Dynamic action buttons** — only actions with real GTO weight for your hand are clickable; the rest are greyed out
+- **Opponent action simulation** — every other seat acts using its own position's range (weighted-random fold/call/raise); folded seats lose their cards and dim out
+- **Live pot, bets, and stacks** — a pot total in the middle of the table, a chip-and-amount indicator next to any seat that's put money in, and stacks that shrink as they do
 - **Face-up hero cards, face-down opponent cards** — rendered at the table like a real hand
-- **GTO percentages reveal after you act** — so you commit to a decision before seeing the answer
-- **Action feedback** — a separate color system tells you how your choice compared to GTO
+- **Neutral buttons that reveal GTO strength after you act** — all three actions look the same before you decide (no hinting from button state); after you act they color green/yellow/red/grey by their actual GTO percentage
+- **Action feedback** — a separate message tells you whether your choice matched, was close to, or missed the GTO play
 - **Accuracy & streak tracking** — persisted locally via `localStorage`, survives refresh
 - **Mobile responsive** — playable on desktop, tablet, or phone
 
@@ -37,22 +38,25 @@ python -m http.server 8000
 
 ## How It Works
 
-1. A position and a real two-card hand are dealt at random.
-2. The hand is mapped to its canonical form (e.g. `K♠9♦` → `K9o`) and looked up in that position's GTO table for the selected stack depth.
-3. Only the actions with nonzero GTO frequency for that hand are clickable (a trash hand shows FOLD only; a premium hand shows RAISE only; a mixed hand shows two options).
-4. You act — the percentages were hidden until this point.
-5. The trainer reveals the fold/call/raise split, compares your action to the highest-frequency one, and shows feedback.
-6. Stats update, and you move to the next hand.
+1. A position and a real two-card hand are dealt to you at random. The seat layout rotates so your position is always shown at the bottom, with the other 5 positions filled in around the table in correct turn order relative to you.
+2. Any opponents who act before you (positions earlier in turn order: UTG → MP → CO → BTN → SB → BB) are simulated immediately: each rolls a weighted-random fold/call/raise from their own position's GTO table for a hand dealt to them. Folded seats lose their cards and dim out; calls and raises show a chip-and-amount indicator and reduce that seat's stack.
+3. Your hand is mapped to its canonical form (e.g. `K♠9♦` → `K9o`) and looked up in your position's GTO table. All three action buttons are available and neutral (no hinting from button state) — nothing is revealed yet.
+4. You act. Opponents who act after you are then simulated the same way.
+5. The buttons reveal: each colors green/yellow/red/grey by its own GTO percentage for the hand you were dealt, and a feedback message says whether you matched the top GTO action, were close, or missed.
+6. The pot in the middle of the table reflects every contribution so far (blinds + calls/raises), and stacks/bet indicators update to match.
+7. Stats update, and you move to the next hand.
+
+**Betting model simplification:** there's no real facing-action tree here — every seat (including you) is scored against its own *opening*-range table regardless of who acted before it. Bet sizing is fixed (blinds 0.5/1 BB, opens/calls to 2.5 BB, one raise cap per hand) purely to make the pot/stack numbers on the table sensible. It's there for the visual and pot-math experience, not as a claim that the simulated opponents are playing solver-correct facing-a-raise strategy.
 
 ## GTO Data Source
 
-The 169-hand tables in `gto_tables/` are **heuristic approximations, not solver output**. They're generated by ranking every starting hand with the **Chen Formula** (Bill Chen's published starting-hand strength heuristic) and applying position- and stack-depth-specific frequency curves on top of that ranking. This produces internally consistent, realistic-looking ranges (tight at UTG, wide on the Button, polarized at 50BB), but it is not a substitute for solver-verified charts (e.g. GTOWizard/PioSolver output). Treat it as a training approximation.
+The 169-hand tables in `gto_tables/` are **heuristic approximations, not solver output**. They're generated by ranking every starting hand with the **Chen Formula** (Bill Chen's published starting-hand strength heuristic) and applying position- and stack-depth-specific frequency curves on top of that ranking, using a smoothstep blend across a wide percentile band so mixed frequencies are common (not just at a single knife-edge cutoff) while the very best and worst hands stay a clean 100%/0%. This produces internally consistent, realistic-looking ranges (tight at UTG, wide on the Button, polarized at 50BB), but it is not a substitute for solver-verified charts (e.g. GTOWizard/PioSolver output). Treat it as a training approximation.
 
-The generator script that produced these tables is not checked in; the logic is: rank all 169 hands by Chen score, then for each position apply a raise cutoff (and, for SB/BB only, a further call/limp cutoff) as a percentile of that ranking, with a small blend zone at each boundary to produce mixed frequencies.
+The generator script that produced these tables is not checked in; the logic is: rank all 169 hands by Chen score, then for each position apply a raise cutoff (and, for SB/BB only, a further call/limp cutoff) as a percentile of that ranking, with a wide smoothstep blend zone at each boundary to produce mixed frequencies.
 
 ## Color System
 
-**GTO percentages (revealed after you act)** — colored by the value itself:
+**GTO percentages (revealed on the action buttons after you act)** — colored by the value itself:
 
 | Range | Color | Meaning |
 |---|---|---|
@@ -61,6 +65,8 @@ The generator script that produced these tables is not checked in; the logic is:
 | 1–24% | 🔴 Red | Not recommended |
 | 0% | ⚫ Grey | Never plays here |
 
+Before you act, all three buttons are neutral white/grey — no color hints at what's correct.
+
 **Action feedback (shown after you act)** — colored by correctness, not by percentage:
 
 | Result | Color | Meaning |
@@ -68,8 +74,6 @@ The generator script that produced these tables is not checked in; the logic is:
 | You matched the top GTO action | 🟢 Green | "Correct!" |
 | Within 15 points of the top action | 🟡 Yellow | "Close call" |
 | More than 15 points off | 🔴 Red | "Incorrect" |
-
-**Action buttons:** FOLD is red, CALL is yellow, RAISE is green — matching the psychology of each action.
 
 ## Tech Stack
 
@@ -109,8 +113,8 @@ Each position file has the shape:
 
 ## Roadmap
 
-- **Done** — random positions/hands, 169-hand per-position ranges, 50BB/100BB stack configs, dynamic action buttons, face-up/down cards, post-action reveal, accuracy tracking
-- **Next** — opponent action simulation with live pot tracking, on-screen range chart for the current position, 9-Max support
+- **Done** — random positions/hands, hero-relative seat rotation, 169-hand per-position ranges, 50BB/100BB stack configs, opponent action simulation with live pot/bet/stack tracking, face-up/down cards, neutral-then-reveal action buttons, accuracy tracking
+- **Next** — on-screen range chart for the current position, 9-Max support
 - **Later** — postflop trainer (flop/turn/river), tournament chip EV, custom range builder, user accounts, cross-device sync, leaderboards
 
 ## Contributing

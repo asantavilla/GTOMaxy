@@ -54,37 +54,45 @@
 
       <section class="table-wrap">
         <div class="poker-table">
-          <div class="felt-label" id="felt-label">6-MAX &middot; 100BB</div>
+          <div class="felt-label">
+            <div class="pot-line" id="pot-line">POT: 0 BB</div>
+          </div>
 
-          <div class="seat" id="seat-UTG" data-position="UTG">
-            <div class="seat-name">UTG</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-UTG"></div>
+          <div class="seat" id="seat-slot0" data-slot="0">
+            <div class="seat-name" id="name-slot0">--</div>
+            <div class="seat-stack" id="stack-slot0">100 BB</div>
+            <div class="seat-cards" id="cards-slot0"></div>
+            <div class="seat-bet" id="bet-slot0"></div>
           </div>
-          <div class="seat" id="seat-MP" data-position="MP">
-            <div class="seat-name">MP</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-MP"></div>
+          <div class="seat" id="seat-slot1" data-slot="1">
+            <div class="seat-name" id="name-slot1">--</div>
+            <div class="seat-stack" id="stack-slot1">100 BB</div>
+            <div class="seat-cards" id="cards-slot1"></div>
+            <div class="seat-bet" id="bet-slot1"></div>
           </div>
-          <div class="seat" id="seat-CO" data-position="CO">
-            <div class="seat-name">CO</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-CO"></div>
+          <div class="seat" id="seat-slot2" data-slot="2">
+            <div class="seat-name" id="name-slot2">--</div>
+            <div class="seat-stack" id="stack-slot2">100 BB</div>
+            <div class="seat-cards" id="cards-slot2"></div>
+            <div class="seat-bet" id="bet-slot2"></div>
           </div>
-          <div class="seat" id="seat-BTN" data-position="BTN">
-            <div class="seat-name">BTN</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-BTN"></div>
+          <div class="seat" id="seat-slot3" data-slot="3">
+            <div class="seat-name" id="name-slot3">--</div>
+            <div class="seat-stack" id="stack-slot3">100 BB</div>
+            <div class="seat-cards" id="cards-slot3"></div>
+            <div class="seat-bet" id="bet-slot3"></div>
           </div>
-          <div class="seat" id="seat-SB" data-position="SB">
-            <div class="seat-name">SB</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-SB"></div>
+          <div class="seat" id="seat-slot4" data-slot="4">
+            <div class="seat-name" id="name-slot4">--</div>
+            <div class="seat-stack" id="stack-slot4">100 BB</div>
+            <div class="seat-cards" id="cards-slot4"></div>
+            <div class="seat-bet" id="bet-slot4"></div>
           </div>
-          <div class="seat" id="seat-BB" data-position="BB">
-            <div class="seat-name">BB</div>
-            <div class="seat-stack">100 BB</div>
-            <div class="seat-cards" id="cards-BB"></div>
+          <div class="seat" id="seat-slot5" data-slot="5">
+            <div class="seat-name" id="name-slot5">--</div>
+            <div class="seat-stack" id="stack-slot5">100 BB</div>
+            <div class="seat-cards" id="cards-slot5"></div>
+            <div class="seat-bet" id="bet-slot5"></div>
           </div>
         </div>
       </section>
@@ -100,28 +108,22 @@
             <div id="hero-cards" class="hero-cards"></div>
           </div>
         </div>
-
-        <div class="gto-percentages hidden" id="gto-percentages">
-          <div class="gto-pct-item">
-            <span class="gto-pct-name">Fold</span>
-            <span id="pct-fold" class="gto-pct-value">--%</span>
-          </div>
-          <div class="gto-pct-item">
-            <span class="gto-pct-name">Call</span>
-            <span id="pct-call" class="gto-pct-value">--%</span>
-          </div>
-          <div class="gto-pct-item">
-            <span class="gto-pct-name">Raise</span>
-            <span id="pct-raise" class="gto-pct-value">--%</span>
-          </div>
-        </div>
-        <p class="pct-hint" id="pct-hint">GTO percentages reveal after you act.</p>
+        <p class="pct-hint" id="pct-hint">GTO percentages reveal on the buttons after you act.</p>
       </section>
 
       <section class="actions">
-        <button id="btn-fold" class="action-btn fold-btn">FOLD</button>
-        <button id="btn-call" class="action-btn call-btn">CALL</button>
-        <button id="btn-raise" class="action-btn raise-btn">RAISE</button>
+        <button id="btn-fold" class="action-btn">
+          <span class="action-name">FOLD</span>
+          <span class="action-pct hidden" id="pct-fold"></span>
+        </button>
+        <button id="btn-call" class="action-btn">
+          <span class="action-name">CALL</span>
+          <span class="action-pct hidden" id="pct-call"></span>
+        </button>
+        <button id="btn-raise" class="action-btn">
+          <span class="action-name">RAISE</span>
+          <span class="action-pct hidden" id="pct-raise"></span>
+        </button>
       </section>
 
       <section class="feedback-box" id="feedback-box" aria-live="polite">
@@ -150,7 +152,7 @@
   </div>
 
   <footer class="app-footer">
-    <p>GTOMaxy &mdash; Free preflop GTO trainer. Runs entirely in your browser. Ranges are heuristic approximations (Chen-formula based), not solver output.</p>
+    <p>GTOMaxy &mdash; Free preflop GTO trainer. Runs entirely in your browser. Ranges are heuristic approximations (Chen-formula based), not solver output. Opponent actions are simulated independently from each seat's own opening range and don't model a full facing-action tree.</p>
   </footer>
 
   <script src="script.js"></script>

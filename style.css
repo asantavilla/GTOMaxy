@@ -153,11 +153,14 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: rgba(212, 175, 55, 0.35);
-  font-weight: bold;
-  font-size: 1.1rem;
-  letter-spacing: 3px;
   text-align: center;
+}
+
+.pot-line {
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
 }
 
 .seat {
@@ -185,6 +188,40 @@ body {
   border-color: var(--gold);
   box-shadow: 0 0 12px var(--gold);
   background: #2a2410;
+}
+
+.seat.folded {
+  opacity: 0.55;
+  filter: grayscale(1);
+}
+
+.folded-label {
+  font-size: 0.6rem;
+  color: #999;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.seat-bet {
+  margin-top: 4px;
+  min-height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 0.65rem;
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.chip-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background: radial-gradient(circle at 35% 35%, #fff8, transparent 60%), var(--gold);
+  border: 1px solid #8a6d1f;
+  flex-shrink: 0;
 }
 
 .seat-cards {
@@ -235,13 +272,15 @@ body {
   border-width: 2px;
 }
 
-/* Seat positions around the oval */
-#seat-UTG  { top: 4%;  left: 50%; transform: translateX(-50%); }
-#seat-MP   { top: 22%; left: 88%; transform: translateX(-50%); }
-#seat-CO   { top: 68%; left: 88%; transform: translateX(-50%); }
-#seat-BTN  { top: 88%; left: 50%; transform: translateX(-50%); }
-#seat-SB   { top: 68%; left: 12%; transform: translateX(-50%); }
-#seat-BB   { top: 22%; left: 12%; transform: translateX(-50%); }
+/* Physical seat slots around the oval, clockwise starting at the bottom.
+   Slot 0 always holds the hero (see script.js rotation logic) so the
+   user's seat is always at the bottom regardless of their position. */
+#seat-slot0 { top: 88%; left: 50%; transform: translateX(-50%); }
+#seat-slot1 { top: 68%; left: 12%; transform: translateX(-50%); }
+#seat-slot2 { top: 22%; left: 12%; transform: translateX(-50%); }
+#seat-slot3 { top: 4%;  left: 50%; transform: translateX(-50%); }
+#seat-slot4 { top: 22%; left: 88%; transform: translateX(-50%); }
+#seat-slot5 { top: 68%; left: 88%; transform: translateX(-50%); }
 
 /* Scenario box */
 .scenario-box {
@@ -278,46 +317,6 @@ body {
   font-weight: bold;
 }
 
-.scenario-value.cards {
-  letter-spacing: 2px;
-}
-
-.gto-percentages {
-  display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.gto-pct-item {
-  flex: 1;
-  min-width: 90px;
-  text-align: center;
-  background: #14171c;
-  border-radius: 8px;
-  padding: 10px 6px;
-  border: 2px solid #333;
-}
-
-.gto-pct-name {
-  display: block;
-  font-size: 0.75rem;
-  color: #999;
-  text-transform: uppercase;
-}
-
-.gto-pct-value {
-  display: block;
-  font-size: 1.4rem;
-  font-weight: bold;
-  margin-top: 4px;
-}
-
-.color-green  { color: var(--green); border-color: var(--green) !important; }
-.color-yellow { color: var(--yellow); border-color: var(--yellow) !important; }
-.color-red    { color: var(--red); border-color: var(--red) !important; }
-.color-grey   { color: var(--grey); border-color: #333 !important; }
-
 .hidden { display: none; }
 
 .pct-hint {
@@ -339,27 +338,35 @@ body {
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 1px;
-  border: none;
+  border: 2px solid #ccc;
   border-radius: 10px;
-  color: #fff;
+  color: #1a1a1a;
+  background: #f0f0f0;
   cursor: pointer;
   min-height: 48px;
-  transition: transform 0.1s ease, filter 0.1s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: transform 0.1s ease, filter 0.1s ease, background 0.2s ease;
 }
 
-.action-btn:hover { filter: brightness(1.1); }
+.action-btn:hover { filter: brightness(0.95); }
 .action-btn:active { transform: scale(0.97); }
-.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.action-btn:disabled { cursor: default; }
 
-.fold-btn  { background: var(--red); }
-.call-btn  { background: var(--yellow); color: #222; }
-.raise-btn { background: #388e3c; }
-
-.action-btn.invalid {
-  background: #2a2a2a;
-  color: #666;
-  filter: none;
+.action-pct {
+  font-size: 0.85rem;
+  font-weight: bold;
 }
+
+/* Reveal colors, applied to the chosen and non-chosen buttons alike after
+   the user acts, so the buttons themselves carry the GTO-strength color. */
+.action-btn.reveal-green  { background: var(--green);  color: #0f1f10; border-color: var(--green); }
+.action-btn.reveal-yellow { background: var(--yellow); color: #221f00; border-color: var(--yellow); }
+.action-btn.reveal-red    { background: var(--red);    color: #fff;    border-color: var(--red); }
+.action-btn.reveal-grey   { background: #555;          color: #ccc;    border-color: #333; }
 
 /* Feedback */
 .feedback-box {
@@ -462,7 +469,6 @@ body {
   .seat-name { font-size: 0.7rem; }
   .seat-stack { font-size: 0.55rem; }
   .scenario-value { font-size: 1.1rem; }
-  .gto-pct-value { font-size: 1.15rem; }
   .action-btn { font-size: 0.95rem; padding: 14px 6px; }
   .hero-cards .card { width: 32px; height: 46px; font-size: 1.05rem; }
 }

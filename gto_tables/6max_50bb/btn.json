@@ -509,452 +509,500 @@
                                                 ]
                           },
                   "K6s":  {
-                              "fold":  0,
+                              "fold":  0.1,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  99.9,
                               "valid_actions":  [
                                                     "raise"
                                                 ]
                           },
                   "K7s":  {
-                              "fold":  0,
+                              "fold":  0.3,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  99.7,
                               "valid_actions":  [
                                                     "raise"
                                                 ]
                           },
                   "K3s":  {
-                              "fold":  0,
+                              "fold":  0.7,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  99.3,
                               "valid_actions":  [
                                                     "raise"
                                                 ]
                           },
                   "Q9o":  {
-                              "fold":  0,
+                              "fold":  1.3,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  98.7,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "A9o":  {
-                              "fold":  0,
+                              "fold":  2,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  98,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "A5o":  {
-                              "fold":  0,
+                              "fold":  2.9,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  97.1,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "A6o":  {
-                              "fold":  0,
+                              "fold":  4,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  96,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "K2s":  {
-                              "fold":  0,
+                              "fold":  5.1,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  94.9,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "Q8s":  {
-                              "fold":  0,
+                              "fold":  6.4,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  93.6,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "55":  {
-                             "fold":  0,
+                             "fold":  7.9,
                              "call":  0,
-                             "raise":  100,
+                             "raise":  92.1,
                              "valid_actions":  [
+                                                   "fold",
                                                    "raise"
                                                ]
                          },
                   "87o":  {
-                              "fold":  0,
+                              "fold":  9.4,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  90.6,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "T7s":  {
-                              "fold":  0,
+                              "fold":  11.1,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  88.9,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "T8o":  {
-                              "fold":  0,
+                              "fold":  12.9,
                               "call":  0,
-                              "raise":  100,
+                              "raise":  87.1,
                               "valid_actions":  [
+                                                    "fold",
                                                     "raise"
                                                 ]
                           },
                   "43s":  {
-                              "fold":  11.9,
+                              "fold":  14.8,
                               "call":  0,
-                              "raise":  88.1,
+                              "raise":  85.2,
                               "valid_actions":  [
                                                     "fold",
                                                     "raise"
                                                 ]
                           },
                   "33":  {
-                             "fold":  41.7,
+                             "fold":  16.7,
                              "call":  0,
-                             "raise":  58.3,
+                             "raise":  83.3,
                              "valid_actions":  [
                                                    "fold",
                                                    "raise"
                                                ]
                          },
                   "64s":  {
-                              "fold":  71.4,
+                              "fold":  18.8,
                               "call":  0,
-                              "raise":  28.6,
+                              "raise":  81.2,
                               "valid_actions":  [
                                                     "fold",
                                                     "raise"
                                                 ]
                           },
                   "44":  {
-                             "fold":  100,
+                             "fold":  21,
                              "call":  0,
-                             "raise":  0,
+                             "raise":  79,
                              "valid_actions":  [
-                                                   "fold"
+                                                   "fold",
+                                                   "raise"
                                                ]
                          },
                   "53s":  {
-                              "fold":  100,
+                              "fold":  23.2,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  76.8,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "76o":  {
-                              "fold":  100,
+                              "fold":  25.5,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  74.5,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "96s":  {
-                              "fold":  100,
+                              "fold":  27.8,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  72.2,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "32s":  {
-                              "fold":  100,
+                              "fold":  30.2,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  69.8,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "97o":  {
-                              "fold":  100,
+                              "fold":  32.7,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  67.3,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K9o":  {
-                              "fold":  100,
+                              "fold":  35.2,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  64.8,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "65o":  {
-                              "fold":  100,
+                              "fold":  37.7,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  62.3,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q4s":  {
-                              "fold":  100,
+                              "fold":  40.3,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  59.7,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q5s":  {
-                              "fold":  100,
+                              "fold":  42.9,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  57.1,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q2s":  {
-                              "fold":  100,
+                              "fold":  45.5,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  54.5,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q7s":  {
-                              "fold":  100,
+                              "fold":  48.1,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  51.9,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q6s":  {
-                              "fold":  100,
+                              "fold":  50.7,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  49.3,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "85s":  {
-                              "fold":  100,
+                              "fold":  53.4,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  46.6,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J7s":  {
-                              "fold":  100,
+                              "fold":  56,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  44,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J8o":  {
-                              "fold":  100,
+                              "fold":  58.6,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  41.4,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "86o":  {
-                              "fold":  100,
+                              "fold":  61.2,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  38.8,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "42s":  {
-                              "fold":  100,
+                              "fold":  63.7,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  36.3,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q3s":  {
-                              "fold":  100,
+                              "fold":  66.2,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  33.8,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "75o":  {
-                              "fold":  100,
+                              "fold":  68.7,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  31.3,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "74s":  {
-                              "fold":  100,
+                              "fold":  71.1,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  28.9,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "54o":  {
-                              "fold":  100,
+                              "fold":  73.5,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  26.5,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K5o":  {
-                              "fold":  100,
+                              "fold":  75.8,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  24.2,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "Q8o":  {
-                              "fold":  100,
+                              "fold":  78.1,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  21.9,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K6o":  {
-                              "fold":  100,
+                              "fold":  80.3,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  19.7,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K8o":  {
-                              "fold":  100,
+                              "fold":  82.4,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  17.6,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K7o":  {
-                              "fold":  100,
+                              "fold":  84.4,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  15.6,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K4o":  {
-                              "fold":  100,
+                              "fold":  86.3,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  13.7,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "43o":  {
-                              "fold":  100,
+                              "fold":  88.1,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  11.9,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J4s":  {
-                              "fold":  100,
+                              "fold":  89.8,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  10.2,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J3s":  {
-                              "fold":  100,
+                              "fold":  91.4,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  8.6,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "T7o":  {
-                              "fold":  100,
+                              "fold":  92.9,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  7.1,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J6s":  {
-                              "fold":  100,
+                              "fold":  94.3,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  5.7,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "T6s":  {
-                              "fold":  100,
+                              "fold":  95.5,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  4.5,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "64o":  {
-                              "fold":  100,
+                              "fold":  96.6,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  3.4,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K3o":  {
-                              "fold":  100,
+                              "fold":  97.6,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  2.4,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J5s":  {
-                              "fold":  100,
+                              "fold":  98.4,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  1.6,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "K2o":  {
-                              "fold":  100,
+                              "fold":  99,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  1,
                               "valid_actions":  [
-                                                    "fold"
+                                                    "fold",
+                                                    "raise"
                                                 ]
                           },
                   "J2s":  {
-                              "fold":  100,
+                              "fold":  99.5,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  0.5,
                               "valid_actions":  [
                                                     "fold"
                                                 ]
                           },
                   "63s":  {
-                              "fold":  100,
+                              "fold":  99.9,
                               "call":  0,
-                              "raise":  0,
+                              "raise":  0.1,
                               "valid_actions":  [
                                                     "fold"
                                                 ]
